@@ -1,0 +1,35 @@
+services:
+  customer-db:
+    image: postgres:15-alpine
+    container_name: customer-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-customer_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-123}
+    ports:
+        - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - customer_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  customer-app:
+    build: .
+    container_name: customer-app
+    ports:
+      - "${APP_PORT:-8084}:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://customer-db:5432/${POSTGRES_DB:-customer_db}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-123}
+      SPRING_PROFILES_ACTIVE: default
+    depends_on:
+      customer-db:
+        condition: service_healthy
+
+volumes:
+  customer_pgdata:
