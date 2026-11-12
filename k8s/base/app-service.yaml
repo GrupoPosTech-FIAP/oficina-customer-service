@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: oficina-customer
+  name: oficina-customer
+spec:
+  ports:
+    - port: 8084
+      protocol: TCP
+      targetPort: 8084
+  selector:
+    app: oficina-customer
+  type: ClusterIP
