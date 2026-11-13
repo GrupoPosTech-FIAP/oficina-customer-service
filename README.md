@@ -362,6 +362,21 @@ O projeto utiliza o **JUnit 5** e ferramentas de teste do ecossistema Spring Boo
 .\mvnw.cmd test -Dspring.profiles.active=local
 ```
 
+### Cobertura e Qualidade
+
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=GrupoPosTech-FIAP_oficina-customer-service&metric=alert_status)](https://sonarcloud.io/summary/overall?id=GrupoPosTech-FIAP_oficina-customer-service) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=GrupoPosTech-FIAP_oficina-customer-service&metric=coverage)](https://sonarcloud.io/component_measures?id=GrupoPosTech-FIAP_oficina-customer-service&metric=coverage)
+
+```bash
+./mvnw clean verify   # testes + relatório e gate do JaCoCo
+```
+
+- **Cobertura:** o JaCoCo reprova o `verify` abaixo de **80% de linhas**. Relatório em
+  `target/site/jacoco/index.html`; o CI escreve o percentual no resumo de cada execução.
+- **Qualidade:** o CI ([`maven.yml`](.github/workflows/maven.yml)) roda em todo PR para a `main`, que só aceita merge
+  com o check `build` verde, e analisa o código no
+  [SonarCloud](https://sonarcloud.io/summary/overall?id=GrupoPosTech-FIAP_oficina-customer-service). O build falha se o
+  quality gate reprovar; a análise roda quando o secret `SONAR_TOKEN` existe na organização.
+
 ---
 
 ## 📄 Licença
